@@ -50,6 +50,7 @@ public class CommandButtons extends JavaPlugin {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(data, true));
 			for (int i = 0; i < locations.length; i++) {
+				writer.write("");
 				writer.write(locations[i].getWorld().getName() + " - " + locations[i].getBlockX() + "," + locations[i].getBlockY() + "," + locations[i].getBlockZ() + " - " + ((String) this.commandButtons.get(locations[i])).toString());
 				writer.newLine();
 			}
@@ -113,6 +114,7 @@ public class CommandButtons extends JavaPlugin {
 				if (isButton(targetBlock)) {
 					if (args.length > 0) {
 						this.commandButtons.put(targetBlock.getLocation(), joinArray(args, " "));
+						saveData();
 						player.sendMessage("Command set to: " + joinArray(args, " "));
 					} else if (this.commandButtons.containsKey(targetBlock.getLocation())) {
 						player.sendMessage("Current command for this button: " + (String) this.commandButtons.get(targetBlock.getLocation()));
