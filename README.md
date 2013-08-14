@@ -3,7 +3,7 @@ CommandButtons
 
 A Bukkit plugin that lets you set a command that a button will execute when pressed.
 
-## COMMANDS: 
+### COMMANDS: 
   /cb [set/clear/show]
   Aliases: CommandButtons, CommandButton
   
