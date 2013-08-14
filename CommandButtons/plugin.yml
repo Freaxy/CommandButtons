@@ -1,0 +1,14 @@
+name:  CommandButtons
+main: io.github.freaxy.CommandButtons
+version: 1.0
+commands:
+   cb:
+      description: Sets a command that the button will perform when used. \nShows the current command if no command is specified.
+      usage: /<command> [commands]
+      permission: <plugin name>.setCommand
+      permission-message: You don't have <permission>
+   CommandButton:
+     description: Sets a command that the button will perform when used. Shows the current command if no command is specified.
+     usage: /<command> [commands]
+     permission: <plugin name>.setCommand
+     permission-message: You don't have <permission>
