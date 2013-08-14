@@ -119,21 +119,21 @@ public class CommandButtons extends JavaPlugin {
 					if (args.length > 0) {
 						switch (args[0]) {
 						case "set":
-							if (player.hasPermission("edit")) {
+							if (player.hasPermission("commandbuttons.edit")) {
 								commandButtons.put(targetBlock.getLocation(), joinArray(args, " ", 1));
 								player.sendMessage(ChatColor.YELLOW + "Command set to: " + ChatColor.WHITE + joinArray(args, " ", 1));
 							} else
 								player.sendMessage(ChatColor.RED + "You don't have the permission to set and edit button commands.");
 							break;
 						case "clear":
-							if (player.hasPermission("edit")) {
+							if (player.hasPermission("commandbuttons.edit")) {
 								commandButtons.remove(targetBlock.getLocation());
 								player.sendMessage(ChatColor.YELLOW + "Command cleared for this button");
 							} else
 								player.sendMessage(ChatColor.RED + "You don't have the permission to set and edit button commands.");
 							break;
 						case "show":
-							if (player.hasPermission("view")) {
+							if (player.hasPermission("commandbuttons.view")) {
 								if (commandButtons.containsKey(targetBlock.getLocation()))
 									player.sendMessage(ChatColor.YELLOW + "Current command for this button: " + ChatColor.WHITE + commandButtons.get(targetBlock.getLocation()));
 								else
