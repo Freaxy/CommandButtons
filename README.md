@@ -1,4 +1,4 @@
-# CommandButtons
+<h1> CommandButtons </h1>  
 A Bukkit plugin that lets you set a command that a button will execute when pressed.
 
 =============================
@@ -13,5 +13,4 @@ A Bukkit plugin that lets you set a command that a button will execute when pres
  <sub> **permission:** *commandbuttons.edit*</sub>  
  - **/cb show** - show the command of the button you are looking at.  
  <sub> **permission:** *commandbuttons.view*</sub>  
-
 
