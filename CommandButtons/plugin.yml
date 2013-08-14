@@ -1,14 +1,24 @@
 name:  CommandButtons
-main: io.github.freaxy.CommandButtons
+description: Lets you set commands that buttons can perform when used.
 version: 1.0
+author: Freaxy
+main: io.github.freaxy.CommandButtons
+database: false
 commands:
    cb:
-      description: Sets a command that the button will perform when used. \nShows the current command if no command is specified.
-      usage: /<command> [commands]
-      permission: <plugin name>.setCommand
-      permission-message: You don't have <permission>
-   CommandButton:
-     description: Sets a command that the button will perform when used. Shows the current command if no command is specified.
-     usage: /<command> [commands]
-     permission: <plugin name>.setCommand
-     permission-message: You don't have <permission>
+      description: Use to set, clear or view the command for the button you're looking at.
+      usage: /<command> [set/clear/show]
+      aliases:  [CommandButtons, CommandButton]
+
+permissions:
+    CommandButtons.*:
+        description: Gives access to all commands.
+        children:
+           CommandButtons.set: true
+           CommandButtons.view: true
+    CommandButtons.edit:
+        description: Allows you to set commands for buttons.
+        default: op
+    CommandButtons.view:
+        description: Allows you to see commands set for buttons.
+        default: op

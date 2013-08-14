@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 
 public class PlayerListener
   implements Listener
@@ -25,7 +27,19 @@ public class PlayerListener
     if (this.plugin.commandButtons.containsKey(block.getLocation()))
       this.plugin.commandButtons.remove(block.getLocation());
   }
+  
+  @EventHandler
+  public void onWorldSave(WorldSaveEvent event) {
+	  plugin.saveData();
+  }
 
+  @EventHandler
+  public void onServerCommand(ServerCommandEvent event) {
+	 if (event.getCommand().equalsIgnoreCase("save-all")) {
+		 plugin.saveData();
+	 }
+  }
+  
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
     Block clickedBlock = event.getClickedBlock();

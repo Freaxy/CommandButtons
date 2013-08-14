@@ -30,7 +30,7 @@ public class CommandButtons extends JavaPlugin {
 	PlayerListener listener = new PlayerListener(this);
 	Server server;
 	ConsoleCommandSender commandSender;
-	File data = new File("plugins/CommandButtons/data.txt");
+	File data;
 	Map<Location, String> commandButtons = new HashMap<Location, String>();
 
 	public void onEnable() {
@@ -47,10 +47,13 @@ public class CommandButtons extends JavaPlugin {
 	public void saveData() {
 		Location[] locations = new Location[this.commandButtons.size()];
 		this.commandButtons.keySet().toArray(locations);
+
 		try {
+			data = new File("plugins/CommandButtons/data.txt");
+			data.delete();
+			data.createNewFile();
 			BufferedWriter writer = new BufferedWriter(new FileWriter(data, true));
 			for (int i = 0; i < locations.length; i++) {
-				writer.write("");
 				writer.write(locations[i].getWorld().getName() + " - " + locations[i].getBlockX() + "," + locations[i].getBlockY() + "," + locations[i].getBlockZ() + " - " + ((String) this.commandButtons.get(locations[i])).toString());
 				writer.newLine();
 			}
@@ -61,6 +64,7 @@ public class CommandButtons extends JavaPlugin {
 	}
 
 	public void loadData() {
+		data = new File("plugins/CommandButtons/data.txt");
 		if (!data.exists())
 			try {
 				data.createNewFile();
@@ -76,7 +80,6 @@ public class CommandButtons extends JavaPlugin {
 					String[] cords = lineSegment[1].split(",");
 					this.commandButtons.put(new Location(this.server.getWorld(lineSegment[0]), Double.parseDouble(cords[0]), Double.parseDouble(cords[1]), Double.parseDouble(cords[2])), lineSegment[2]);
 				}
-
 				reader.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -89,6 +92,7 @@ public class CommandButtons extends JavaPlugin {
 	public void onDisable() {
 		saveData();
 		saveConfig();
+		commandButtons.clear();
 	}
 
 	public boolean isButton(Block block) {
@@ -98,29 +102,48 @@ public class CommandButtons extends JavaPlugin {
 		return false;
 	}
 
-	public String joinArray(String[] stringArray, String seperator) {
+	public String joinArray(String[] stringArray, String seperator, int offsetBegining) {
 		String string = "";
-		for (int i = 0; i < stringArray.length; i++) {
+		for (int i = offsetBegining; i < stringArray.length; i++) {
 			string = string + stringArray[i] + " ";
 		}
 		return string;
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if ((label.equalsIgnoreCase("cb")) || (label.equalsIgnoreCase("CommandButton"))) {
+		if (label.equalsIgnoreCase("cb") || label.equalsIgnoreCase("CommandButton") || label.equalsIgnoreCase("CommandButtons")) {
 			if ((sender instanceof Player)) {
 				Player player = (Player) sender;
 				Block targetBlock = player.getTargetBlock(null, 16);
 				if (isButton(targetBlock)) {
 					if (args.length > 0) {
-						this.commandButtons.put(targetBlock.getLocation(), joinArray(args, " "));
-						saveData();
-						player.sendMessage("Command set to: " + joinArray(args, " "));
-					} else if (this.commandButtons.containsKey(targetBlock.getLocation())) {
-						player.sendMessage("Current command for this button: " + (String) this.commandButtons.get(targetBlock.getLocation()));
-					} else {
-						player.sendMessage("No command set for this button. You can set it with /" + label + " command");
-					}
+						switch (args[0]) {
+						case "set":
+							if (player.hasPermission("edit")) {
+								commandButtons.put(targetBlock.getLocation(), joinArray(args, " ", 1));
+								player.sendMessage(ChatColor.YELLOW + "Command set to: " + ChatColor.WHITE + joinArray(args, " ", 1));
+							} else
+								player.sendMessage(ChatColor.RED + "You don't have the permission to set and edit button commands.");
+							break;
+						case "clear":
+							if (player.hasPermission("edit")) {
+								commandButtons.remove(targetBlock.getLocation());
+								player.sendMessage(ChatColor.YELLOW + "Command cleared for this button");
+							} else
+								player.sendMessage(ChatColor.RED + "You don't have the permission to set and edit button commands.");
+							break;
+						case "show":
+							if (player.hasPermission("view")) {
+								if (commandButtons.containsKey(targetBlock.getLocation()))
+									player.sendMessage(ChatColor.YELLOW + "Current command for this button: " + ChatColor.WHITE + commandButtons.get(targetBlock.getLocation()));
+								else
+									player.sendMessage(ChatColor.YELLOW + "No command currently set");
+							} else
+								player.sendMessage(ChatColor.RED + "You don't have the permission to view button commands");
+							break;
+						}
+					} else
+						return false;
 				} else
 					player.sendMessage(ChatColor.RED + "You must be looking at a button");
 
